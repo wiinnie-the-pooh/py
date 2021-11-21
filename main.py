@@ -34,15 +34,18 @@ def nodes2list(node):
 class Solution:
     def run(self, n: int) -> int:
         c = p = n
-        i = 0
-        while p:
+        r = 0
+        for i in range(32):
             c = p >> 1
             t = c << 1
+            r <<= 1
             if t != p:
-                i += 1
+                r += 1
+                pass
             p = c
-        return i
+            # fmt = bin(r)
+            pass
+        return r
 
-assert Solution().run(n = 0b10000000) == 1
-
-assert Solution().run(n = 0b1011) == 3
+assert Solution().run(n = 0b11111111111111111111111111111101) == 0b10111111111111111111111111111111
+assert Solution().run(n = 0b00000010100101000001111010011100) == 0b00111001011110000010100101000000
