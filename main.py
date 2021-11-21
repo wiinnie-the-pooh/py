@@ -32,27 +32,17 @@ def nodes2list(node):
 
 
 class Solution:
-    def letterCasePermutation(self, s: str) -> List[str]:
-        B = sum(letter.isalpha() for letter in s)
-        ans = []
+    def climbStairs(self, n: int) -> int:
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
+        res = self.climbStairs(n-1) + self.climbStairs(n - 2)
+        return res
 
-        lst = list(range(1 << B))
-        for bits in lst:
-            b = 0
-            word = []
-            for letter in s:
-                if letter.isalpha():
-                    if (bits >> b) & 1:
-                        word.append(letter.lower())
-                    else:
-                        word.append(letter.upper())
 
-                    b += 1
-                else:
-                    word.append(letter)
-
-            ans.append("".join(word))
-        return ans
-assert Solution().letterCasePermutation(s = "a1b2") == ["a1b2","a1B2","A1b2","A1B2"]
-assert Solution().letterCasePermutation(s = "12345") == ["12345"]
-assert Solution().letterCasePermutation(s = "3z4") == ["3z4","3Z4"]
+assert Solution().climbStairs(n = 3) == 3
+assert Solution().climbStairs(n = 4) == 5
+assert Solution().climbStairs(n = 2) == 2
