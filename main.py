@@ -32,19 +32,17 @@ def nodes2list(node):
 
 
 class Solution:
-    def isPowerOfTwo(self, n: int) -> bool:
-        t = n >> 1
-        c = 0
-        while t:
-            t = t >> 1
-            c += 1
+    def run(self, n: int) -> int:
+        c = p = n
+        i = 0
+        while p:
+            c = p >> 1
+            t = c << 1
+            if t != p:
+                i += 1
+            p = c
+        return i
 
-        v = 1 << c
-        res = (v == n)
-        return res
+assert Solution().run(n = 0b10000000) == 1
 
-assert Solution().isPowerOfTwo(n = 0) == False
-assert Solution().isPowerOfTwo(n = 6) == False
-assert Solution().isPowerOfTwo(n = 1) == True
-assert Solution().isPowerOfTwo(n = 7) == False
-assert Solution().isPowerOfTwo(n = 16) == True
+assert Solution().run(n = 0b1011) == 3
