@@ -32,18 +32,20 @@ def nodes2list(node):
 
 
 class Solution:
-    def run(self, nums: List[int]) -> int:
-        endi = len(nums)
-        acc = [None] * (endi + 1)
-        acc[-1] = 0
-        acc[-2] = nums[-1]
-        for i in range(endi - 2, -1, -1):
-            acc[i] = max(acc[i + 1], acc[i + 2] + nums[i])
-        return acc[0]
+    def run(self, triangle: List[List[int]]) -> int:
+        endi = len(triangle)
+        def step(i: int, j: int) -> int:
+            ii = i + 1
+            acc = triangle[i][j]
+            if ii == endi:
+                return acc
+            acc1 = step(ii, j)
+            acc2 = step(ii, j + 1)
+            acc += min(acc1, acc2)
+            return acc
+        
+        res = step(0, 0)
+        return res
 
-assert Solution().run(nums = [1,2,1,1]) == 3
-assert Solution().run(nums = [2,7,9,3,1]) == 12
-assert Solution().run(nums = []) == 0
-assert Solution().run(nums = [1]) == 1
-assert Solution().run(nums = [1,0,0,1]) == 2
-assert Solution().run(nums = [1,2,3,1]) == 4
+assert Solution().run(triangle = [[-10]]) == -10
+assert Solution().run(triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]) == 11
