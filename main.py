@@ -32,18 +32,19 @@ def nodes2list(node):
 
 
 class Solution:
-    def climbStairs(self, n: int) -> int:
-        arr = [0, 1, 2]
-        if n < 3:
-            return arr[n]
-        res = -1
-        for i in range(3, n + 1):
-            res = arr[1] + arr[2]
-            arr[1], arr[2] = arr[2], res
-        
+    def isPowerOfTwo(self, n: int) -> bool:
+        t = n >> 1
+        c = 0
+        while t:
+            t = t >> 1
+            c += 1
+
+        v = 1 << c
+        res = (v == n)
         return res
 
-
-assert Solution().climbStairs(n = 3) == 3
-assert Solution().climbStairs(n = 4) == 5
-assert Solution().climbStairs(n = 2) == 2
+assert Solution().isPowerOfTwo(n = 0) == False
+assert Solution().isPowerOfTwo(n = 6) == False
+assert Solution().isPowerOfTwo(n = 1) == True
+assert Solution().isPowerOfTwo(n = 7) == False
+assert Solution().isPowerOfTwo(n = 16) == True
