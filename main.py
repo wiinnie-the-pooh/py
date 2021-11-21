@@ -33,12 +33,25 @@ def nodes2list(node):
 
 class Solution:
     def run(self, nums: List[int]) -> int:
-        reg = set()
-        for val in nums:
-            if val in reg:
-                reg.remove(val)
-            else:
-                reg.add(val)
-        return reg.pop()
+        endi = len(nums)
+        def step(cur: int, acc: int) -> int:
+            if cur >= endi:
+                return acc
+            acc += nums[cur]
+            ext = acc
+            for i in range(cur + 2, endi):
+                tmp = step(i, acc)
+                ext = max(tmp, ext)
+            acc = ext
+            return acc
 
-assert Solution().run(nums = [2,2,1]) == 1
+        res1 = step(0, 0)
+        res2 = step(1, 0)
+        res = max(res1, res2)
+        return res
+
+assert Solution().run(nums = [2,7,9,3,1]) == 12
+assert Solution().run(nums = []) == 0
+assert Solution().run(nums = [1]) == 1
+assert Solution().run(nums = [1,0,0,1]) == 2
+assert Solution().run(nums = [1,2,3,1]) == 4
