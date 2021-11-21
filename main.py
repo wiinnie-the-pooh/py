@@ -33,13 +33,14 @@ def nodes2list(node):
 
 class Solution:
     def climbStairs(self, n: int) -> int:
-        if n == 0:
-            return 0
-        if n == 1:
-            return 1
-        if n == 2:
-            return 2
-        res = self.climbStairs(n-1) + self.climbStairs(n - 2)
+        arr = [0, 1, 2]
+        if n < 3:
+            return arr[n]
+        res = -1
+        for i in range(3, n + 1):
+            res = arr[1] + arr[2]
+            arr[1], arr[2] = arr[2], res
+        
         return res
 
 
