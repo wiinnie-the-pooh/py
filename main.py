@@ -34,22 +34,22 @@ def nodes2list(node):
 class Solution:
     def run(self, nums: List[int]) -> int:
         endi = len(nums)
-        def step(cur: int, acc: int) -> int:
+        memo = dict()
+        def step(cur: int) -> int:
             if cur >= endi:
-                return acc
-            acc += nums[cur]
-            ext = acc
-            for i in range(cur + 2, endi):
-                tmp = step(i, acc)
-                ext = max(tmp, ext)
-            acc = ext
+                return 0
+
+            if cur in memo:
+                return memo[cur]
+
+            acc = max(step(cur + 1), step(cur + 2) + nums[cur])
+            memo[cur] = acc
             return acc
 
-        res1 = step(0, 0)
-        res2 = step(1, 0)
-        res = max(res1, res2)
+        res = step(0)
         return res
 
+assert Solution().run(nums = [1,2,1,1]) == 3
 assert Solution().run(nums = [2,7,9,3,1]) == 12
 assert Solution().run(nums = []) == 0
 assert Solution().run(nums = [1]) == 1
