@@ -34,20 +34,12 @@ def nodes2list(node):
 class Solution:
     def run(self, nums: List[int]) -> int:
         endi = len(nums)
-        memo = dict()
-        def step(cur: int) -> int:
-            if cur >= endi:
-                return 0
-
-            if cur in memo:
-                return memo[cur]
-
-            acc = max(step(cur + 1), step(cur + 2) + nums[cur])
-            memo[cur] = acc
-            return acc
-
-        res = step(0)
-        return res
+        acc = [None] * (endi + 1)
+        acc[-1] = 0
+        acc[-2] = nums[-1]
+        for i in range(endi - 2, -1, -1):
+            acc[i] = max(acc[i + 1], acc[i + 2] + nums[i])
+        return acc[0]
 
 assert Solution().run(nums = [1,2,1,1]) == 3
 assert Solution().run(nums = [2,7,9,3,1]) == 12
