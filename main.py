@@ -97,14 +97,24 @@ assert tree2list(list2tree(t)) == t
 from collections import *
 class Solution:
     def run(self, nums: List[int]) -> List[int]:
-        shift = 0
-        for i, val in enumerate(nums):
-            if val == 0:
-                shift += 1
-            else:
-                nums[i] = 0
-                nums[i - shift] = val
+        endi = len(nums)
+        i = 0; j = endi - 1
+        while i < j:
+            while i < j:
+                if nums[i] % 2 == 0: # even
+                    i += 1
+                else:
+                    break
+
+            while i < j:
+                if nums[j] % 2 != 0: # even
+                    j -= 1
+                else:
+                    break
                 
+            nums[i], nums[j] = nums[j], nums[i]
+            pass
+        
         return nums
 
-assert Solution().run(nums = [0,1,0,3,12]) == [1,3,12,0,0]
+assert Solution().run(nums = [3,1,2,4]) == [2,4,3,1]
