@@ -96,24 +96,29 @@ assert tree2list(list2tree(t)) == t
 
 from collections import *
 class Solution:
-    def run(self, nums: List[int]) -> None:
-        endi = len(nums)
-        last = endi - 1
-        for i in range(last, 0, -1):
-            if nums[i - 1] < nums[i]:
-                for j in range(last, i - 1, -1):
-                    if nums[j] > nums[i - 1]:
-                        nums[i - 1], nums[j] = nums[j], nums[i - 1]
-                        l = i; r = last
-                        while l < r:
-                            nums[l], nums[r] = nums[r], nums[l]
-                            l += 1
-                            r -= 1
-                        return nums
-        nums.sort()
-        return nums
+    def run(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        i1 = m - 1
+        i2 = n - 1
+        i = len(nums1) - 1
+        res = nums1
+        while i1 != -1 and i2 != -1:
+            if nums1[i1] > nums2[i2]:
+                res[i] = nums1[i1]
+                i1 -= 1
+            else:
+                res[i] = nums2[i2]
+                i2 -= 1
+            i -= 1
+            pass
+        if i2 != -1:
+            while i != -1:
+                res[i] = nums2[i2]
+                i2 -= 1
+                i -= 1
+                pass
 
-assert Solution().run(nums = [1,3,2]) == [2,1,3]
-assert Solution().run(nums = [3,2,1]) == [1,2,3]
-assert Solution().run(nums = [4,5,2,6,7,3,1]) == [4,5,2,7,1,3,6]
-assert Solution().run(nums = [1,2,3]) == [1,3,2]
+        return res
+
+assert Solution().run(nums1 = [0], m = 0, nums2 = [1], n = 1) == [1]
+assert Solution().run(nums1 = [1], m = 1, nums2 = [], n = 0) == [1]
+assert Solution().run(nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3) == [1,2,2,3,5,6]
