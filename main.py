@@ -96,17 +96,18 @@ assert tree2list(list2tree(t)) == t
 
 from collections import *
 class Solution:
-    def run(self, nums: List[int], val: int) -> int:
+    def run(self, nums: List[int]) -> int:
         j = 0
+        val = None
         for v in nums:
             nums[j] = v
             if v != val:
                 j += 1
                 pass
+            val = v
             pass
 
         res = nums[:j]
         return res
 
-assert Solution().run(nums = [0,1,2,2,3,0,4,2], val = 2) == [0,1,3,0,4]
-assert Solution().run(nums = [3,2,2,3], val = 3) == [2,2]
+assert Solution().run(nums = [0,0,1,1,1,2,2,3,3,4]) == [0,1,2,3,4]
