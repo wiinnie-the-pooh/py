@@ -95,26 +95,49 @@ t = [6, 2, 8, 0, 4, 7, 9, None, None, 3, 5]
 assert tree2list(list2tree(t)) == t
 
 from collections import *
+
+
 class Solution:
+    def run2(self, nums: List[int]) -> List[int]:
+        nums.sort()
+        exp = 1
+        res = []
+        prev = None
+        for i, val in enumerate(nums):
+            if val == prev:
+                continue
+            prev = val
+            if val != exp:
+                res.append(exp)
+            exp += 1
+        res.extend((i for i in range(exp, len(nums) + 1)))
+        return res
+
     def run(self, nums: List[int]) -> List[int]:
+        nums.sort()
+        res = []
         endi = len(nums)
-        i = 0; j = endi - 1
-        while i < j:
-            while i < j:
-                if nums[i] % 2 == 0: # even
-                    i += 1
-                else:
+        j = 0
+        for i in range(1, endi + 1):
+            while j != endi:
+                val = nums[j]
+                if val < i:
+                    j += 1
+                    continue
+                if val == i:
+                    j += 1
                     break
+                res.append(i)
+                break
+        gen = [i for i in range(val + 1, endi + 1)]
+        res.extend(gen)
+        return res
 
-            while i < j:
-                if nums[j] % 2 != 0: # even
-                    j -= 1
-                else:
-                    break
-                
-            nums[i], nums[j] = nums[j], nums[i]
-            pass
-        
-        return nums
 
-assert Solution().run(nums = [3,1,2,4]) == [2,4,3,1]
+def test_current():
+    assert Solution().run(nums=[10, 2, 5, 10, 9, 1, 1, 4, 3, 7]) == [6, 8]
+
+
+def test_rest():
+    assert Solution().run(nums=[4, 3, 2, 7, 8, 2, 3, 1]) == [5, 6]
+    assert Solution().run(nums=[1, 1]) == [2]
