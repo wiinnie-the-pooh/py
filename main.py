@@ -98,20 +98,27 @@ from collections import *
 
 
 class Solution:
-    def run(self, nums: List[str]) -> str:
+    def run(self, nums: List[int]) -> int:
         endi = len(nums)
-        mxs = pow(2, endi)
-        for i in range(mxs):
-            f = f"{i:0{endi}b}"
-            if f not in nums:
-                return f
+        diff = endi * 10
+        last = True
+        for i in range(endi):
+            idx = nums[i] % diff
+            if idx == endi:
+                last = False
+                continue
+            nums[idx] += diff
             pass
-        return ""
+        res = [i for i, val in enumerate(nums) if val < diff]
+        if last:
+            res.append(endi)
+        return res[0]
 
 
 def test_current():
-    assert Solution().run(nums=["111", "011", "001"]) == ["101"]
+    assert Solution().run(nums=[0, 1]) == 2
 
 
 def test_rest():
-    pass
+    assert Solution().run(nums=[9, 6, 4, 2, 3, 5, 7, 0, 1]) == 8
+    assert Solution().run(nums=[3, 0, 1]) == 2
