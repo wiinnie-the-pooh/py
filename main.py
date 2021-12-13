@@ -98,39 +98,13 @@ from collections import *
 
 
 class Solution:
-    def run2(self, nums: List[int]) -> List[int]:
-        nums.sort()
-        exp = 1
-        res = []
-        prev = None
-        for i, val in enumerate(nums):
-            if val == prev:
-                continue
-            prev = val
-            if val != exp:
-                res.append(exp)
-            exp += 1
-        res.extend((i for i in range(exp, len(nums) + 1)))
-        return res
-
     def run(self, nums: List[int]) -> List[int]:
-        nums.sort()
-        res = []
         endi = len(nums)
-        j = 0
-        for i in range(1, endi + 1):
-            while j != endi:
-                val = nums[j]
-                if val < i:
-                    j += 1
-                    continue
-                if val == i:
-                    j += 1
-                    break
-                res.append(i)
-                break
-        gen = [i for i in range(val + 1, endi + 1)]
-        res.extend(gen)
+        for i in range(endi):
+            idx = abs(nums[i]) - 1
+            nums[idx] *= -1 if nums[idx] > 0 else 1
+
+        res = [i + 1 for i, val in enumerate(nums) if val > 0]
         return res
 
 
