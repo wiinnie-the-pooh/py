@@ -1,9 +1,8 @@
-import collections
-import re
-from typing import *
-from collections import *
-import math
 import copy
+import math
+import re
+from collections import *
+from typing import *
 
 
 class ListNode:
@@ -94,40 +93,33 @@ def list2tree(input):
 t = [6, 2, 8, 0, 4, 7, 9, None, None, 3, 5]
 assert tree2list(list2tree(t)) == t
 
-from collections import *
-
 
 class Solution:
-    def run(self, matrix: List[List[int]]) -> List[List[int]]:
-        m = matrix
-        m2 = copy.deepcopy(m)
-        end = len(matrix)
-        ni = end - 1
-        for i in range(ni):
-            nj = ni - i
-            for j in range(i, nj):
-                m[i][j], m[j][ni - i], m[ni - i][ni - j], m[ni - j][i] = (
-                    m[ni - j][i],
-                    m[i][j],
-                    m[j][ni - i],
-                    m[ni - i][ni - j],
-                )
-                pass
-            pass
-        return m
+    def run(self, nums: List[int]) -> bool:
+        last = len(nums) - 1
+        if last == 0:
+            return True
+        stack = set()
+        idx = 0
+        while True:
+            addons = [idx + i for i in range(1, nums[idx] + 1) if i + idx <= last]
+            stack |= set(addons)
+            if not stack:
+                return False
+            if last in stack:
+                return True
+            idx = stack.pop()
+        return False
 
 
 def test_current():
-    assert Solution().run(
-        matrix=[[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12, 16]]
-    ) == [[15, 13, 2, 5], [14, 3, 4, 1], [12, 6, 8, 9], [16, 7, 10, 11]]
+    assert Solution().run(nums=[1, 2]) == True
     pass
 
 
 def test_rest():
-    assert Solution().run(matrix=[[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == [
-        [7, 4, 1],
-        [8, 5, 2],
-        [9, 6, 3],
-    ]
+    assert Solution().run(nums=[0]) == True
+    assert Solution().run(nums=[1]) == True
+    assert Solution().run(nums=[2, 3, 1, 1, 4]) == True
+    assert Solution().run(nums=[3, 2, 1, 0, 4]) == False
     pass
