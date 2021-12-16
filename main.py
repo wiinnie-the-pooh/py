@@ -95,31 +95,25 @@ assert tree2list(list2tree(t)) == t
 
 
 class Solution:
-    def run(self, nums: List[int]) -> bool:
-        last = len(nums) - 1
-        if last == 0:
-            return True
-        stack = set()
-        idx = 0
-        while True:
-            addons = [idx + i for i in range(1, nums[idx] + 1) if i + idx <= last]
-            stack |= set(addons)
-            if not stack:
-                return False
-            if last in stack:
-                return True
-            idx = stack.pop()
-        return False
+    def run(self, digits: List[int]) -> List[int]:
+        last = len(digits) - 1
+        addon = 1
+        for i in range(last, -1, -1):
+            val = digits[i] + addon
+            addon = val // 10
+            value = val % 10
+            digits[i] = value
+        if addon > 0:
+            digits.insert(0, addon)
+        return digits
 
 
 def test_current():
-    assert Solution().run(nums=[1, 2]) == True
+    assert Solution().run(digits=[9]) == [1, 0]
     pass
 
 
 def test_rest():
-    assert Solution().run(nums=[0]) == True
-    assert Solution().run(nums=[1]) == True
-    assert Solution().run(nums=[2, 3, 1, 1, 4]) == True
-    assert Solution().run(nums=[3, 2, 1, 0, 4]) == False
+    assert Solution().run(digits=[1, 2, 3]) == [1, 2, 4]
+    assert Solution().run(digits=[4, 3, 9, 9]) == [4, 4, 0, 0]
     pass
