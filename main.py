@@ -98,27 +98,36 @@ from collections import *
 
 
 class Solution:
-    def run(self, nums: List[int]) -> int:
-        endi = len(nums)
-        diff = endi * 10
-        last = True
-        for i in range(endi):
-            idx = nums[i] % diff
-            if idx == endi:
-                last = False
-                continue
-            nums[idx] += diff
+    def run(self, matrix: List[List[int]]) -> List[List[int]]:
+        m = matrix
+        m2 = copy.deepcopy(m)
+        end = len(matrix)
+        ni = end - 1
+        for i in range(ni):
+            nj = ni - i
+            for j in range(i, nj):
+                m[i][j], m[j][ni - i], m[ni - i][ni - j], m[ni - j][i] = (
+                    m[ni - j][i],
+                    m[i][j],
+                    m[j][ni - i],
+                    m[ni - i][ni - j],
+                )
+                pass
             pass
-        res = [i for i, val in enumerate(nums) if val < diff]
-        if last:
-            res.append(endi)
-        return res[0]
+        return m
 
 
 def test_current():
-    assert Solution().run(nums=[0, 1]) == 2
+    assert Solution().run(
+        matrix=[[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12, 16]]
+    ) == [[15, 13, 2, 5], [14, 3, 4, 1], [12, 6, 8, 9], [16, 7, 10, 11]]
+    pass
 
 
 def test_rest():
-    assert Solution().run(nums=[9, 6, 4, 2, 3, 5, 7, 0, 1]) == 8
-    assert Solution().run(nums=[3, 0, 1]) == 2
+    assert Solution().run(matrix=[[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == [
+        [7, 4, 1],
+        [8, 5, 2],
+        [9, 6, 3],
+    ]
+    pass
