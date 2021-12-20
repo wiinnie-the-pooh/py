@@ -95,25 +95,53 @@ assert tree2list(list2tree(t)) == t
 
 
 class Solution:
-    def run(self, digits: List[int]) -> List[int]:
-        last = len(digits) - 1
-        addon = 1
-        for i in range(last, -1, -1):
-            val = digits[i] + addon
-            addon = val // 10
-            value = val % 10
-            digits[i] = value
-        if addon > 0:
-            digits.insert(0, addon)
-        return digits
+    def run(self, nums: List[int], k: int) -> int:
+        wsum = sum(nums)
+        endi = len(nums)
+        lsum = {0: 0}
+        rsum = {wsum: endi - 1}
+        lcsum = 0
+        rcsum = wsum
+        for i, j in zip(range(endi), reversed(range(endi))):
+            lcsum += nums[i]
+            rcsum -= nums[j]
+            if lcsum not in lsum:
+                lsum[lcsum] = i + 1
+            if rcsum not in rsum:
+                rsum[rcsum] = j - 1
+            pass
+
+        assert rcsum == 0
+        assert lcsum == wsum
+
+        mdist = -math.inf
+        for lval in sorted(lsum):
+            i = lsum[lval]
+            rval = lval + k
+            if rval not in rsum:
+                continue
+
+            j = rsum[rval]
+            dist = j - i + 1
+            if dist < mdist:
+                continue
+
+            mdist = dist
+            pass
+
+        if mdist < 0:
+            return 0
+
+        return mdist
 
 
 def test_current():
-    assert Solution().run(digits=[9]) == [1, 0]
+    assert Solution().run(nums=[-5, 8, 2, -1, 6, -3, 7, 1, 8, -2, 7], k=-4) == 0
+    assert Solution().run(nums=[-1, 1], k=-1) == 1
+    assert Solution().run(nums=[-2, 1, -3, 4, -1, 2, 1, -5, 4], k=0) == 4
     pass
 
 
 def test_rest():
-    assert Solution().run(digits=[1, 2, 3]) == [1, 2, 4]
-    assert Solution().run(digits=[4, 3, 9, 9]) == [4, 4, 0, 0]
+    assert Solution().run(nums=[1, -1, 5, -2, 3], k=3) == 4
     pass
