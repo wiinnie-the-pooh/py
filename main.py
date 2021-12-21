@@ -96,52 +96,31 @@ assert tree2list(list2tree(t)) == t
 
 class Solution:
     def run(self, nums: List[int], k: int) -> int:
-        wsum = sum(nums)
-        endi = len(nums)
-        lsum = {0: 0}
-        rsum = {wsum: endi - 1}
-        lcsum = 0
-        rcsum = wsum
-        for i, j in zip(range(endi), reversed(range(endi))):
-            lcsum += nums[i]
-            rcsum -= nums[j]
-            if lcsum not in lsum:
-                lsum[lcsum] = i + 1
-            if rcsum not in rsum:
-                rsum[rcsum] = j - 1
-            pass
-
-        assert rcsum == 0
-        assert lcsum == wsum
-
-        mdist = -math.inf
-        for lval in sorted(lsum):
-            i = lsum[lval]
-            rval = lval + k
-            if rval not in rsum:
+        res = 0
+        prod = 1
+        j = 0
+        cases = []
+        for i, val in enumerate(nums):
+            prod *= nums[i]
+            if prod < k:
+                items = [nums[cj : i + 1] for cj in range(j, i + 1)]
+                cases.extend(items)
                 continue
-
-            j = rsum[rval]
-            dist = j - i + 1
-            if dist < mdist:
-                continue
-
-            mdist = dist
+            while prod >= k and j <= i:
+                prod /= nums[j]
+                j += 1
+                pass
+            items = [nums[cj : i + 1] for cj in range(j, i + 1)]
+            cases.extend(items)
             pass
-
-        if mdist < 0:
-            return 0
-
-        return mdist
+        return len(cases)
 
 
 def test_current():
-    assert Solution().run(nums=[-5, 8, 2, -1, 6, -3, 7, 1, 8, -2, 7], k=-4) == 0
-    assert Solution().run(nums=[-1, 1], k=-1) == 1
-    assert Solution().run(nums=[-2, 1, -3, 4, -1, 2, 1, -5, 4], k=0) == 4
+    assert Solution().run(nums = [1,2,3], k = 0) == 0
+    assert Solution().run(nums=[10, 5, 2, 6], k=100) == 8
     pass
 
 
 def test_rest():
-    assert Solution().run(nums=[1, -1, 5, -2, 3], k=3) == 4
     pass
