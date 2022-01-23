@@ -1,7 +1,11 @@
+#!/usr/bin/env pytest
+
+from cmath import log10
 import copy
 import math
 import re
 from collections import *
+from turtle import st
 from typing import *
 
 
@@ -95,30 +99,45 @@ assert tree2list(list2tree(t)) == t
 
 
 class Solution:
-    def run(self, nums: List[int], k: int) -> int:
-        res = 0
-        prod = 1
-        j = 0
-        cases = []
-        for i, val in enumerate(nums):
-            prod *= nums[i]
-            if prod < k:
-                items = [nums[cj : i + 1] for cj in range(j, i + 1)]
-                cases.extend(items)
-                continue
-            while prod >= k and j <= i:
-                prod /= nums[j]
-                j += 1
-                pass
-            items = [nums[cj : i + 1] for cj in range(j, i + 1)]
-            cases.extend(items)
+    def run(self, low: int, high: int) -> List[int]:
+        digits = math.floor(math.log10(low))
+        start = []
+        tmp = low
+        while tmp > 0:
+            num = tmp % 10
+            start.insert(0, num)
+            tmp = int(tmp / 10)
             pass
-        return len(cases)
+        endi = len(start)
+        start2 = copy.copy(start)
 
+        def list2num(lst: List) -> int:
+            num = lst[0]
+            endi = len(lst)
+            for i in range(1, endi):
+                num = num * 10 + lst[i]
+            return num
+
+        res = []
+        while True:
+            start2 = [start2[0] + i for i in range(endi)]
+            low2 = list2num(start2)
+            if low2 > high:
+                break
+            if start2[0] + endi - 1 > 9:
+                endi += 1
+                start2 = [i + 1 for i in range(endi)]
+                continue
+            else:
+                start2[0] += 1
+            if low2 >= low:
+                res.append(low2)
+        return res
 
 def test_current():
-    assert Solution().run(nums = [1,2,3], k = 0) == 0
-    assert Solution().run(nums=[10, 5, 2, 6], k=100) == 8
+    assert Solution().run(low = 124, high = 300) == [234]
+    assert Solution().run(low = 100, high = 300) == [123,234]
+    assert Solution().run(low = 1000, high = 13000) == [1234,2345,3456,4567,5678,6789,12345]
     pass
 
 
