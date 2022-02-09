@@ -99,45 +99,34 @@ assert tree2list(list2tree(t)) == t
 
 
 class Solution:
-    def run(self, low: int, high: int) -> List[int]:
-        digits = math.floor(math.log10(low))
-        start = []
-        tmp = low
-        while tmp > 0:
-            num = tmp % 10
-            start.insert(0, num)
-            tmp = int(tmp / 10)
-            pass
-        endi = len(start)
-        start2 = copy.copy(start)
-
-        def list2num(lst: List) -> int:
-            num = lst[0]
-            endi = len(lst)
-            for i in range(1, endi):
-                num = num * 10 + lst[i]
-            return num
-
-        res = []
-        while True:
-            start2 = [start2[0] + i for i in range(endi)]
-            low2 = list2num(start2)
-            if low2 > high:
-                break
-            if start2[0] + endi - 1 > 9:
-                endi += 1
-                start2 = [i + 1 for i in range(endi)]
+    def run(self, s: str) -> int:
+        pos = {}
+        max_len = cur_len = -1
+        for i, ch in enumerate(s):
+            if len(pos) < 2:
+                pos[ch] = i
+                max_len = cur_len = i + 1
                 continue
+            if ch in pos:
+                pos[ch] = i
+                cur_len += 1
+                pass
             else:
-                start2[0] += 1
-            if low2 >= low:
-                res.append(low2)
-        return res
+                chs = list(pos.keys())
+                last_ch = chs[1]
+                if pos[chs[0]] < pos[chs[1]]:
+                    last_ch = chs[0]
+                cur_len = i - pos[last_ch]
+                del pos[last_ch]
+                pos[ch] = i
+                pass
+            max_len = max(cur_len, max_len)
+            pass
+        return max_len
 
 def test_current():
-    assert Solution().run(low = 124, high = 300) == [234]
-    assert Solution().run(low = 100, high = 300) == [123,234]
-    assert Solution().run(low = 1000, high = 13000) == [1234,2345,3456,4567,5678,6789,12345]
+    assert Solution().run(s = "eceba") == 3
+    assert Solution().run(s = "ccaabbb") == 5
     pass
 
 
