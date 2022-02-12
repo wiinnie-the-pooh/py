@@ -99,36 +99,38 @@ assert tree2list(list2tree(t)) == t
 
 
 class Solution:
-    def run(self, s: str) -> int:
-        pos = {}
-        max_len = cur_len = -1
-        for i, ch in enumerate(s):
-            if len(pos) < 2:
-                pos[ch] = i
-                max_len = cur_len = i + 1
-                continue
-            if ch in pos:
-                pos[ch] = i
-                cur_len += 1
-                pass
+    def run(self, nums: List[int], lower: int, upper: int) -> List[str]:
+        res = []
+
+        def add(begin, end):
+            if begin != end:
+                res.append(f"{begin}->{end}")
             else:
-                chs = list(pos.keys())
-                last_ch = chs[1]
-                if pos[chs[0]] < pos[chs[1]]:
-                    last_ch = chs[0]
-                cur_len = i - pos[last_ch]
-                del pos[last_ch]
-                pos[ch] = i
-                pass
-            max_len = max(cur_len, max_len)
-            pass
-        return max_len
+                res.append(f"{end}")
+
+        for cur in nums:
+            if lower < cur:
+                val = cur - 1
+                add(lower, val)
+            lower = cur + 1
+
+        if lower <= upper:
+            add(lower, upper)
+
+        return res
+
 
 def test_current():
-    assert Solution().run(s = "eceba") == 3
-    assert Solution().run(s = "ccaabbb") == 5
+    assert Solution().run(nums=[], lower=1, upper=1) == ["1"]
+    assert Solution().run(nums=[-1], lower=-1, upper=-1) == []
     pass
 
 
 def test_rest():
+    assert Solution().run(nums=[0, 1, 3, 50, 75], lower=0, upper=99) == [
+        "2",
+        "4->49",
+        "51->74",
+        "76->99",
+    ]
     pass
